@@ -2,11 +2,11 @@
     电子词典 服务端
 """
 from socket import *
-import os,sys
+import os,sys,time,signal
 from login_sys import LoginSys
 from seach_word import SearchWord
 HOST = '0.0.0.0'
-PORT = 8000
+PORT = 8800
 user_name =''
 
 
@@ -79,10 +79,15 @@ def do_quit(connfd,msg):
 
 
 def main():
-    s = socket(AF_INET,SOCK_STREAM)
-    # s.setsockopt(SOL_SOCKET,SO_REUSEADDR,1)
+    s = socket()
+    s.setsockopt(SOL_SOCKET,SO_REUSEADDR,1)
     s.bind((HOST,PORT))
     s.listen(3)
+
+    # 处理僵尸进程
+    signal.signal(signal.SIGCHLD,signal.SIG_IGN)
+
+
     print('Waiting for connection...')
 
     while True:
@@ -90,10 +95,12 @@ def main():
             connfd, addr = s.accept()
             print("connected from",addr)
         except KeyboardInterrupt:
+            s.close()
             sys.exit("Server quit.")
         except Exception as e:
             print(e)
             continue
+
 
         pid = os.fork()
         if pid <0:

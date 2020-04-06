@@ -1,7 +1,7 @@
 from socket import *
 
 HOST = '192.168.237.150'
-PORT = 8000
+PORT = 8800
 name = ''
 
 # def input_msg():
