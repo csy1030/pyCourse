@@ -33,8 +33,8 @@ class SearchWord:
         # return sql
 
     def get_history(self,name):
-        sql = "select name,word,translation,date_format(time, '%%%%y-%%%%m-%%%%d %%%%h:%%%%i:%%%%s') from search_history where name = '%s';" % name
-        self.cur.execute(sql)
+        sql = "select name,word,translation,date_format(time, '%%y-%%m-%%d %%h:%%i:%%s') from search_history where name = %s;"
+        self.cur.execute(sql,name)
         data = self.cur.fetchall()
         self.cur.close()
         return data

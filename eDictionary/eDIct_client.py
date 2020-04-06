@@ -1,7 +1,7 @@
 from socket import *
 
 HOST = '192.168.237.150'
-PORT = 8009
+PORT = 8000
 name = ''
 
 # def input_msg():
@@ -76,7 +76,15 @@ def search_word(s):
 def get_history(s):
     msg = 'H ' + name
     s.send(msg.encode())
+    print('History')
+    print("++++++++++")
 
+    lines = s.recv(2048).decode()
+    if lines == 'OK':
+        print("++++++++++")
+        return
+    else:
+        print(lines)
 
 def main():
     s = socket()

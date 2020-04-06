@@ -6,7 +6,7 @@ import os,sys
 from login_sys import LoginSys
 from seach_word import SearchWord
 HOST = '0.0.0.0'
-PORT = 8009
+PORT = 8000
 user_name =''
 
 
@@ -50,7 +50,6 @@ def do_login(connfd,name,pwd):
     ls = LoginSys('user_db', name, pwd)
     connfd.send(b'OK') if ls.login() else connfd.send(b'wrong')
 
-    # print("登录成功!") if ls.login() else print("用户名或密码错误..")
 
 def do_search(connfd,word):
     search = SearchWord(word)
@@ -63,9 +62,14 @@ def do_search(connfd,word):
         connfd.send(trans[0].encode())
 
 def do_history(connfd,name):
+
     search = SearchWord()
     data = search.get_history(name)
-    print(data)
+    for item in data:
+        item = ' | '.join(item)
+        item += '\n'
+        connfd.send(item.encode())
+    connfd.send(b'OK')
 
 
 def do_quit(connfd,msg):
